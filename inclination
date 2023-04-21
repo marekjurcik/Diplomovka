@@ -1,0 +1,33 @@
+import astropy.coordinates as coord
+import astropy.units as u
+import numpy as np
+import gala.coordinates as gc
+import gala.dynamics as gd
+import gala.potential as gp
+from gala.units import galactic
+from gala.dynamics import mockstream as ms
+import pandas as pd 
+import math
+
+_ = coord.galactocentric_frame_defaults.set('v4.0')
+c = coord.ICRS(ra=229 * u.deg, dec=-0.124 * u.deg,
+               distance=22.9 * u.kpc,
+               pm_ra_cosdec=-2.296 * u.mas/u.yr,
+               pm_dec=-2.257 * u.mas/u.yr,
+               radial_velocity=-58.7 * u.km/u.s)
+c_gc = c.transform_to(coord.Galactocentric).cartesian
+w0 = gd.PhaseSpacePosition(c_gc)
+x=(w0.x).value
+y=(w0.y).value
+z=(w0.z).value
+R=np.sqrt(x**2+y**2)
+inclination_xyz=np.arctan2(z,R)
+
+c_gc_sperical=coord.cartesian_to_spherical(x, y, z)
+c_gc_sperical2=c.transform_to(coord.Galactocentric).spherical
+w2=gd.PhaseSpacePosition(c_gc_sperical2)
+
+
+print("From galactocentric",math.degrees(inclination_xyz))
+print("From spherical",math.degrees(c_gc_sperical[1].value))
+print((c_gc_sperical2.lat).value)
