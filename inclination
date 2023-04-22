@@ -26,8 +26,11 @@ inclination_xyz=np.arctan2(z,R)
 c_gc_sperical=coord.cartesian_to_spherical(x, y, z)
 c_gc_sperical2=c.transform_to(coord.Galactocentric).spherical
 w2=gd.PhaseSpacePosition(c_gc_sperical2)
-
+angular=w0.angular_momentum().value
+L=np.sqrt(angular[0]**2+angular[1]**2+angular[2]**2)
+inc_angular=math.degrees(np.arccos(angular[2]/L))
 
 print("From galactocentric",math.degrees(inclination_xyz))
 print("From spherical",math.degrees(c_gc_sperical[1].value))
 print((c_gc_sperical2.lat).value)
+print("From angular",inc_angular)
